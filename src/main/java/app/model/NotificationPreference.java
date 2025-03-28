@@ -36,7 +36,6 @@ public class NotificationPreference {
     private LocalDateTime createdOn;
 
     @Column(nullable = false)
-
     private LocalDateTime updatedOn;
 
 }

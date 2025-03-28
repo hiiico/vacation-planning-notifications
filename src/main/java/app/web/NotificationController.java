@@ -66,7 +66,7 @@ public class NotificationController {
 
     @GetMapping
     public ResponseEntity<List<NotificationResponse>> getNotificationResponse(
-            @RequestParam(name= "userid") UUID userId) {
+            @RequestParam(name= "userId") UUID userId) {
 
        List<NotificationResponse> notificationHistory = notificationService.getNotificationHistory(userId)
                .stream()
@@ -75,6 +75,20 @@ public class NotificationController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(notificationHistory);
+    }
+
+    @PutMapping("/preferences")
+    public ResponseEntity<NotificationPreferenceResponse> changeNotificationPreference(
+            @RequestParam(name = "userId") UUID userId,
+            @RequestParam(name = "enable") boolean enable) {
+
+        NotificationPreference notificationPreference = notificationService.changeNotificationPreference(userId, enable);
+
+        NotificationPreferenceResponse responseDto = DtoMapper.fromNotificationPreference(notificationPreference);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(responseDto);
     }
 
 }
