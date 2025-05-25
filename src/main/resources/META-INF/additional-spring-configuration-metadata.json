@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "feign.client.config.default.connectTimeout",
+      "type": "java.lang.String",
+      "description": "Description for feign.client.config.default.connectTimeout."
+    },
+    {
+      "name": "feign.client.config.default.readTimeout",
+      "type": "java.lang.String",
+      "description": "Description for feign.client.config.default.readTimeout."
+    },
+    {
+      "name": "vacation_planning.base-url",
+      "type": "java.lang.String",
+      "description": "Description for vacation_planning.base-url."
+    }
+  ] }

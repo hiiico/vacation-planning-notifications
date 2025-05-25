@@ -8,6 +8,8 @@ import app.web.dto.NotificationRequest;
 import app.web.dto.NotificationResponse;
 import app.web.dto.UpsertNotificationPreference;
 import app.web.mapper.DtoMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/notifications")
+@Tag(name = "Notification Management", description = "Operations related to notifications.")
 public class NotificationController {
 
     private final NotificationService notificationService;
@@ -27,6 +30,7 @@ public class NotificationController {
         this.notificationService = notificationService;
     }
 
+    @Operation(summary = "Create new Notification Preferences", description = "Return the created notification preference.")
     @PostMapping("/preferences")
     public ResponseEntity<NotificationPreferenceResponse> upsertNotificationPreference(
             @RequestBody UpsertNotificationPreference upsertNotificationPreference) {
@@ -41,6 +45,7 @@ public class NotificationController {
                 .body(responseDto);
     }
 
+    @Operation(summary = "Return Notification Preferences", description = "Return the notification preferences by user id.")
     @GetMapping("/preferences")
     public ResponseEntity<NotificationPreferenceResponse> getNotificationPreference(
             @RequestParam(name = "userId") UUID userId) {
@@ -53,6 +58,7 @@ public class NotificationController {
                 .body(responseDto);
     }
 
+    @Operation(summary = "Send Notification", description = "Send notification to user by email.")
     @PostMapping()
     public ResponseEntity<NotificationResponse> sendNotification(
             @RequestBody NotificationRequest notificationRequest) {
@@ -64,6 +70,7 @@ public class NotificationController {
                 .body(response);
     }
 
+    @Operation(summary = "Return Notifications", description = "Return the notifications by user id.")
     @GetMapping
     public ResponseEntity<List<NotificationResponse>> getNotificationResponse(
             @RequestParam(name= "userId") UUID userId) {
@@ -77,6 +84,7 @@ public class NotificationController {
                 .body(notificationHistory);
     }
 
+    @Operation(summary = "Change Notification Preferences", description = "Change Notification Preferences by user id.")
     @PutMapping("/preferences")
     public ResponseEntity<NotificationPreferenceResponse> changeNotificationPreference(
             @RequestParam(name = "userId") UUID userId,
