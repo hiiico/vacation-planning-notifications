@@ -1,2 +1,1 @@
-Please run this API first!
-This API is @FeignClient for vacation_planning API.
+Please run this API first!It builds all services for vacation_planning API.
