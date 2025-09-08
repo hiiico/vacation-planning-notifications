@@ -1,5 +1,5 @@
 # Use Java ... as base image
-FROM openjdk:23
+FROM openjdk:17
 #FROM ubuntu:latest
 LABEL authors="hiiico"
 
