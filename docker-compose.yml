@@ -15,8 +15,12 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       # Optional create databases from:
+#      LINUX
       - /init-wrapper.sh:/docker-entrypoint-initdb.d/init-wrapper.sh
-      # or
+#      WINDOWS
+#      with wrapper
+#        - ./init-wrapper.cmd:/docker-entrypoint-initdb.d/init-wrapper.cmd
+#      without wrapper
 #      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: unless-stopped
     healthcheck:
@@ -72,6 +76,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: hiiico/vacation_planning-urlaubsplanung-notification  # Add this line for pushing
     ports:
       - "8081:8081"
 #    extra_hosts:
@@ -96,8 +101,10 @@ services:
     networks:
       - app-network
     depends_on:
-      - kafka
-      - mysql-db
+      kafka:
+        condition: service_started
+      mysql-db:
+        condition: service_healthy
     restart: unless-stopped
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
