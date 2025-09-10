@@ -10,3 +10,6 @@ COPY target/vacation-planning-notifications-*.jar urlaubsplanung-notifications.j
 # define how to run the application
 #ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "app.jar"]
 ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "urlaubsplanung-notifications.jar"]
+
+COPY init-wrapper.sh /docker-entrypoint-initdb.d/
+RUN chmod +x /docker-entrypoint-initdb.d/init-wrapper.sh
