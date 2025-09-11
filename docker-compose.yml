@@ -21,7 +21,7 @@ services:
 #      with wrapper
 #        - ./init-wrapper.cmd:/docker-entrypoint-initdb.d/init-wrapper.cmd
 #      without wrapper
-#      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: unless-stopped
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}" ]
@@ -81,11 +81,11 @@ services:
       - "8081:8081"
 #    extra_hosts:
 #      - "host.docker.internal:host-gateway"
-      #    env_file:
-      #      - .env
+    env_file:
+      - .env
     environment:
       - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_DATASOURCE_URL=jdbc:mysql://shared-mysql-db:3306/vacation_planning-notifications?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      - SPRING_DATASOURCE_URL=jdbc:mysql://shared-mysql-db:3306/vacation_planning-notifications?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
       # Kafka Configuration
