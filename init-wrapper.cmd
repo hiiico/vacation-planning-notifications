@@ -18,8 +18,8 @@ if %errorlevel% neq 0 (
 echo Database vacation_planning created or already exists
 
 :: Optional: Grant privileges to a specific user (adjust as needed)
-mysql -u root -p%MYSQL_ROOT_PASSWORD% -e "GRANT ALL PRIVILEGES ON \`vacation_planning-notifications\`.* TO 'appuser'@'%';"
-mysql -u root -p%MYSQL_ROOT_PASSWORD% -e "GRANT ALL PRIVILEGES ON \`vacation_planning\`.* TO 'appuser'@'%';"
+mysql -u root -p%MYSQL_ROOT_PASSWORD% -e "GRANT ALL PRIVILEGES ON \`vacation_planning-notifications\`.* TO '${DB_USERNAME}'@'%';"
+mysql -u root -p%MYSQL_ROOT_PASSWORD% -e "GRANT ALL PRIVILEGES ON \`vacation_planning\`.* TO '${DB_USERNAME}'@'%';"
 
 echo Both databases created successfully
 echo Running additional initialization scripts...
