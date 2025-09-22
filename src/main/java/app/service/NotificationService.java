@@ -7,7 +7,7 @@ import app.model.NotificationType;
 import app.repository.NotificationRepository;
 import app.repository.PreferenceRepository;
 import app.web.dto.NotificationRequest;
-import app.web.dto.UpsertNotificationPreference;
+import app.event.payload.UpsertNotificationPreference;
 import app.web.mapper.DtoMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

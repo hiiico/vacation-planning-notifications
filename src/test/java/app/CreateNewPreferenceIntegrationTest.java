@@ -4,7 +4,7 @@ import app.model.NotificationPreference;
 import app.repository.PreferenceRepository;
 import app.service.NotificationService;
 import app.web.dto.NotificationTypeRequest;
-import app.web.dto.UpsertNotificationPreference;
+import app.event.payload.UpsertNotificationPreference;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

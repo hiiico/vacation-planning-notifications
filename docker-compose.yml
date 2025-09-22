@@ -16,7 +16,7 @@ services:
       - mysql_data:/var/lib/mysql
       # Optional create databases from:
 #      LINUX
-      - /init-wrapper.sh:/docker-entrypoint-initdb.d/init-wrapper.sh
+      - ./init-wrapper.sh:/docker-entrypoint-initdb.d/init-wrapper.sh
 #      WINDOWS
 #      with wrapper
 #        - ./init-wrapper.cmd:/docker-entrypoint-initdb.d/init-wrapper.cmd
@@ -85,7 +85,7 @@ services:
       #      - .env
     environment:
       - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_DATASOURCE_URL=jdbc:mysql://shared-mysql-db:3306/vacation_planning-notifications?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      - SPRING_DATASOURCE_URL=jdbc:mysql://shared-mysql-db:3306/vacation_planning-notifications?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
       # Kafka Configuration

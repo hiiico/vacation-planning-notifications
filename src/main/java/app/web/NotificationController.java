@@ -6,7 +6,7 @@ import app.service.NotificationService;
 import app.web.dto.NotificationPreferenceResponse;
 import app.web.dto.NotificationRequest;
 import app.web.dto.NotificationResponse;
-import app.web.dto.UpsertNotificationPreference;
+import app.event.payload.UpsertNotificationPreference;
 import app.web.mapper.DtoMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
