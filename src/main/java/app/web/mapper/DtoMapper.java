@@ -4,6 +4,7 @@ import app.model.Notification;
 import app.model.NotificationPreference;
 import app.model.NotificationType;
 import app.web.dto.NotificationPreferenceResponse;
+import app.event.payload.NotificationPreferenceResponseKafka;
 import app.web.dto.NotificationResponse;
 import app.web.dto.NotificationTypeRequest;
 import lombok.experimental.UtilityClass;
@@ -27,6 +28,17 @@ public class DtoMapper {
                         .enabled(dto.isEnable())
                         .userId(dto.getUserId())
                         .build();
+    }
+
+    public static NotificationPreferenceResponseKafka fromNotificationPreferenceKafka(NotificationPreference dto) {
+
+        return NotificationPreferenceResponseKafka.builder()
+                .id(dto.getUserId())
+                .type(dto.getType())
+                .contactInfo(dto.getContactInfo())
+                .enabled(dto.isEnable())
+                .userId(dto.getUserId())
+                .build();
     }
 
     public static NotificationResponse fromNotification(Notification entity) {

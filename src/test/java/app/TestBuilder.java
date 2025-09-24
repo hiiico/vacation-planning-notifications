@@ -1,9 +1,9 @@
 package app;
 
+import app.event.payload.UpsertNotificationPreference;
 import app.model.NotificationPreference;
 import app.model.NotificationType;
 import app.web.dto.NotificationTypeRequest;
-import app.event.payload.UpsertNotificationPreference;
 import lombok.experimental.UtilityClass;
 
 import java.time.LocalDateTime;
