@@ -1,12 +1,11 @@
 package app.web;
 
+import app.event.payload.UpsertNotificationPreference;
 import app.model.Notification;
 import app.model.NotificationPreference;
 import app.service.NotificationService;
 import app.web.dto.NotificationPreferenceResponse;
-import app.web.dto.NotificationRequest;
 import app.web.dto.NotificationResponse;
-import app.event.payload.UpsertNotificationPreference;
 import app.web.mapper.DtoMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -61,7 +60,7 @@ public class NotificationController {
     @Operation(summary = "Send Notification", description = "Send notification to user by email.")
     @PostMapping()
     public ResponseEntity<NotificationResponse> sendNotification(
-            @RequestBody NotificationRequest notificationRequest) {
+            @RequestBody app.web.dto.NotificationRequest notificationRequest) {
 
         Notification notification = notificationService.sendNotification(notificationRequest);
         NotificationResponse response = DtoMapper.fromNotification(notification);

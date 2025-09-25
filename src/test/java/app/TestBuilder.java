@@ -1,9 +1,8 @@
 package app;
 
-import app.event.payload.UpsertNotificationPreference;
 import app.model.NotificationPreference;
 import app.model.NotificationType;
-import app.web.dto.NotificationTypeRequest;
+import app.web.dto.NotificationRequest;
 import lombok.experimental.UtilityClass;
 
 import java.time.LocalDateTime;
@@ -24,12 +23,11 @@ public class TestBuilder {
                 .build();
     }
 
-    public static UpsertNotificationPreference aRandomUpsertNotificationPreference() {
-        return UpsertNotificationPreference.builder()
+    public static NotificationRequest aRandomUpsertNotificationPreference() {
+        return NotificationRequest.builder()
                 .userId(UUID.randomUUID())
-                .type(NotificationTypeRequest.EMAIL)
-                .contactInfo("text")
-                .notificationEnabled(true)
+                .subject("subject")
+                .body("body")
                 .build();
     }
 }

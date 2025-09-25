@@ -1,5 +1,6 @@
 package app.service;
 
+import app.event.payload.UpsertNotificationPreference;
 import app.model.Notification;
 import app.model.NotificationPreference;
 import app.model.NotificationStatus;
@@ -7,7 +8,6 @@ import app.model.NotificationType;
 import app.repository.NotificationRepository;
 import app.repository.PreferenceRepository;
 import app.web.dto.NotificationRequest;
-import app.event.payload.UpsertNotificationPreference;
 import app.web.mapper.DtoMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
