@@ -1,5 +1,6 @@
 package app.web.mapper;
 
+import app.event.payload.NotificationResponseKafka;
 import app.model.Notification;
 import app.model.NotificationPreference;
 import app.model.NotificationType;
@@ -44,6 +45,17 @@ public class DtoMapper {
     public static NotificationResponse fromNotification(Notification entity) {
 
         return NotificationResponse.builder()
+                .subject(entity.getSubject())
+                .status(entity.getStatus())
+                .createdOn(entity.getCreatedOn())
+                .type(entity.getType())
+                .build();
+    }
+
+    public static NotificationResponseKafka fromNotificationKafka(Notification entity) {
+
+        return NotificationResponseKafka.builder()
+                .userId(entity.getUserId())
                 .subject(entity.getSubject())
                 .status(entity.getStatus())
                 .createdOn(entity.getCreatedOn())
