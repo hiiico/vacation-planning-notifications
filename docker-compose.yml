@@ -5,6 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: hiiico/vacation_planning-urlaubsplanung-notification  # Add this line for pushing
+    container_name: notifications-app
     ports:
       - "8081:8081"
 #    extra_hosts:
@@ -13,7 +14,7 @@ services:
       - .env
     environment:
       - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_DATASOURCE_URL=${MYSQL_HOST}
+      - SPRING_DATASOURCE_URL=${MYSQL_HOST_2}
       - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
       # Kafka Configuration
@@ -28,11 +29,6 @@ services:
       - SPRING_MAIL_PROTOCOL=smtp
     networks:
       - app-network
-    depends_on:
-      kafka:
-        condition: service_started
-      mysql-db:
-        condition: service_healthy
     restart: unless-stopped
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
@@ -43,7 +39,7 @@ services:
 networks:
   app-network:
     name: app-network
-    driver: bridge
+    external: true
 
 volumes:
   kafka_data:
