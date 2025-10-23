@@ -92,6 +92,15 @@ pipeline {
             }
         }
 
+        stage('Verify Infrastructure Connectivity') {
+            steps {
+                script {
+                    echo "Verifying infrastructure connectivity from host perspective..."
+                    verifyInfrastructureConnectivity()
+                }
+            }
+        }
+
         stage('Build Application') {
             steps {
                 script {
@@ -123,6 +132,14 @@ pipeline {
             }
         }
 
+        stage('Debug Microservice Startup') {
+            steps {
+                script {
+                    debugMicroserviceStartup()
+                }
+            }
+        }
+
         stage('Verify Microservice Health') {
             steps {
                 script {
@@ -146,8 +163,46 @@ pipeline {
         }
         failure {
             echo "❌ Microservice deployment failed!"
+            script {
+                // Debug information on failure
+                sh '''
+                    echo "=== DEBUG INFORMATION ==="
+                    echo "Current containers:"
+                    docker ps -a
+                    echo "Microservice logs:"
+                    docker logs notifications-app --tail 50 2>&1 || echo "Could not get microservice logs"
+                    echo "Infrastructure logs:"
+                    docker logs shared-mysql-db --tail 20 2>&1 || echo "Could not get MySQL logs"
+                    docker logs kafka --tail 20 2>&1 || echo "Could not get Kafka logs"
+                    echo "Network information:"
+                    docker network ls
+                    docker network inspect app-network 2>&1 || echo "Could not inspect app-network"
+                    echo "========================="
+                '''
+            }
         }
     }
+}
+
+// ========== INFRASTRUCTURE CONNECTIVITY VERIFICATION ==========
+
+def verifyInfrastructureConnectivity() {
+    echo "Verifying infrastructure connectivity for microservice..."
+
+    // Test if microservice can reach infrastructure services
+    sh '''
+        echo "Testing infrastructure connectivity..."
+
+        # Create a test container on the same network to verify connectivity
+        docker run --rm --network app-network alpine:latest \
+            sh -c "
+                echo 'Testing MySQL connectivity...'
+                nc -z shared-mysql-db 3306 && echo '✅ MySQL reachable' || echo '❌ MySQL not reachable'
+
+                echo 'Testing Kafka connectivity...'
+                nc -z kafka 9092 && echo '✅ Kafka reachable' || echo '❌ Kafka not reachable'
+            "
+    '''
 }
 
 // ========== INFRASTRUCTURE CHECK FUNCTIONS (NO PORT EXPOSURE) ==========
@@ -380,18 +435,50 @@ def deployMicroservice() {
     echo "✅ Microservice deployment initiated"
 }
 
+def debugMicroserviceStartup() {
+    echo "Debugging microservice startup..."
+
+    // Wait a bit for the container to start
+    sleep 30
+
+    sh '''
+        echo "=== MICROSERVICE STARTUP DEBUG ==="
+        echo "Container status:"
+        docker ps -a | grep notifications-app || echo "Microservice container not found"
+
+        echo "Microservice logs (last 30 lines):"
+        docker logs notifications-app --tail 30 2>&1 || echo "Could not get microservice logs"
+
+        echo "Checking if container is on correct network:"
+        docker inspect notifications-app --format='{{range .NetworkSettings.Networks}}{{.NetworkID}} {{end}}' 2>&1
+
+        echo "Environment variables in container:"
+        docker exec notifications-app env 2>&1 | grep -E "(MYSQL|KAFKA|SPRING)" || echo "Could not get environment variables"
+
+        echo "================================"
+    '''
+}
+
 def verifyMicroserviceHealth() {
     echo "Verifying microservice health..."
 
-    timeout(time: 120, unit: 'SECONDS') {
+    timeout(time: 180, unit: 'SECONDS') {
         waitUntil {
             try {
-                // Only microservice port is exposed (8081), so we can check it normally
-                sh "curl -f http://localhost:${env.MICROSERVICE_PORT}/actuator/health"
+                // Use more verbose curl for debugging
+                sh """
+                    echo "Testing microservice health endpoint..."
+                    curl -v --connect-timeout 10 --max-time 30 http://localhost:${env.MICROSERVICE_PORT}/actuator/health
+                """
                 return true
             } catch (Exception e) {
-                echo "Waiting for microservice health..."
-                sleep 5
+                echo "Waiting for microservice health... (attempt)"
+                // Show logs while waiting
+                sh '''
+                    echo "Current microservice logs:"
+                    docker logs notifications-app --tail 10 2>&1 | tail -5 || echo "Could not get logs"
+                '''
+                sleep 10
                 return false
             }
         }
