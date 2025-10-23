@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        INFRASTRUCTURE_JOB = 'Infrastructure-Pipeline'
+        INFRASTRUCTURE_JOB = 'Infrastructure'
     }
 
     stages {
